@@ -1,0 +1,1124 @@
+
+<Window x:Class="WheelBridge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WheelBridge" Height="800" Width="1220"
+        MinHeight="700" MinWidth="1020"
+        WindowStartupLocation="CenterScreen"
+        Background="#0A101B" Foreground="#EAF1FA"
+        FontFamily="Segoe UI"
+        Loaded="MainWindow_Loaded" Closed="MainWindow_Closed">
+
+    <Window.Resources>
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A5B4C8"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,12"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <Grid>
+                                <Border Width="3" Margin="0,8,0,8"
+                                        HorizontalAlignment="Left"
+                                        Background="{TemplateBinding BorderBrush}"
+                                        CornerRadius="2"/>
+                                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#192A40"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#203B5E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#223A59"/>
+            <Setter Property="Foreground" Value="#EDF4FF"/>
+            <Setter Property="BorderBrush" Value="#35577F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,9,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#315783"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#609BEB"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#1B304B"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#347CF6"/>
+            <Setter Property="BorderBrush" Value="#5794FF"/>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#482A39"/>
+            <Setter Property="BorderBrush" Value="#744054"/>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="#111C2C"/>
+            <Setter Property="BorderBrush" Value="#263A54"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <Style x:Key="MutedText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#91A2B9"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#0C1523"/>
+            <Setter Property="Foreground" Value="#EAF1FA"/>
+            <Setter Property="BorderBrush" Value="#344A67"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="CaretBrush" Value="#FFFFFF"/>
+        </Style>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#3478F6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Foreground" Value="#111111"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background" Value="#DCEAFF"/>
+                                <Setter Property="Foreground" Value="#111111"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#C5DCFF"/>
+                                <Setter Property="Foreground" Value="#111111"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#C7D4E5"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,7,12,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="Meter" TargetType="ProgressBar">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Background" Value="#25364D"/>
+            <Setter Property="Foreground" Value="#4A91F5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- TOP BAR -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2"
+                Background="#101A29"
+                BorderBrush="#263A54"
+                BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="40" Height="40" CornerRadius="11" Background="#347CF6">
+                        <TextBlock Text="W" FontSize="24" FontWeight="Bold"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Margin="12,0" VerticalAlignment="Center">
+                        <TextBlock Text="WHEELBRIDGE" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="STEERING INPUT SYSTEM" FontSize="9" Foreground="#8294AC"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Column="1" Background="#1A2A40"
+                        BorderBrush="#2C4565" BorderThickness="1"
+                        CornerRadius="9" Padding="12,7"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="WINDOWS 11  ·  PREVIEW"
+                               FontSize="10" Foreground="#8DB8FF"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- SIDEBAR -->
+        <Border Grid.Row="1" Grid.Column="0" Background="#0D1623"
+                BorderBrush="#263A54" BorderThickness="0,0,1,0">
+            <DockPanel Margin="12,24,12,18">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="MENU PRINCIPALE" FontSize="9"
+                               FontWeight="Bold" Foreground="#657891"
+                               Margin="11,0,0,13"/>
+                    <Button x:Name="DashboardNavButton" Content="◈    Dashboard"
+                            Style="{StaticResource NavButton}" Click="Dashboard_Click"/>
+                    <Button x:Name="DevicesNavButton" Content="◉    Dispositivi"
+                            Style="{StaticResource NavButton}" Click="Devices_Click"/>
+                    <Button x:Name="MappingNavButton" Content="⌘    Mappatura"
+                            Style="{StaticResource NavButton}" Click="Mapping_Click"/>
+                    <Button x:Name="ProfilesNavButton" Content="▤    Profili"
+                            Style="{StaticResource NavButton}" Click="Profiles_Click"/>
+                    <Button x:Name="SettingsNavButton" Content="⚙    Impostazioni"
+                            Style="{StaticResource NavButton}" Click="Settings_Click"/>
+                </StackPanel>
+                <Border DockPanel.Dock="Bottom" Background="#131F30"
+                        BorderBrush="#263A54" BorderThickness="1"
+                        CornerRadius="12" Padding="13" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="VERSIONE" FontSize="9" Foreground="#73869F"/>
+                        <TextBlock Text="WheelBridge 1.1" FontSize="12"
+                                   FontWeight="SemiBold" Margin="0,5,0,2"/>
+                        <TextBlock Text="Configurazione locale" FontSize="10"
+                                   Foreground="#73869F"/>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+
+        <!-- PAGE HOST -->
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <!-- DASHBOARD -->
+            <ScrollViewer x:Name="DashboardPage" Visibility="Visible"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Panoramica del tuo sistema di controllo."
+                               Style="{StaticResource MutedText}" Margin="0,5,0,24"/>
+
+                    <Grid Margin="0,0,0,17">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,8,0">
+                            <StackPanel>
+                                <TextBlock Text="DISPOSITIVO FISICO" FontSize="10" Foreground="#91A2B9"/>
+                                <TextBlock Text="Dispositivo DirectInput" FontSize="17"
+                                           FontWeight="SemiBold" Margin="0,12,0,7"/>
+                                <TextBlock x:Name="DashboardDeviceStatus"
+                                           Text="Non collegato" FontSize="11" Foreground="#EAB866"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Card}" Margin="8,0">
+                            <StackPanel>
+                                <TextBlock Text="USCITA GAMEPAD" FontSize="10" Foreground="#91A2B9"/>
+                                <TextBlock Text="Xbox 360 virtuale" FontSize="17"
+                                           FontWeight="SemiBold" Margin="0,12,0,7"/>
+                                <TextBlock Text="Driver non ancora configurato"
+                                           FontSize="11" Foreground="#EAB866"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource Card}" Margin="8,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="PROFILO ATTIVO" FontSize="10" Foreground="#91A2B9"/>
+                                <TextBlock x:Name="DashboardProfileName" Text="Predefinito"
+                                           FontSize="17" FontWeight="SemiBold" Margin="0,12,0,7"/>
+                                <TextBlock Text="Configurazione locale"
+                                           FontSize="11" Foreground="#78D8AB"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="MONITOR INPUT MAPPATI" FontSize="17" FontWeight="SemiBold"/>
+                            <TextBlock Text="Valori normalizzati in base alla mappatura selezionata."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,20"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="55"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="STERZO" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ProgressBar x:Name="DashboardSteeringBar" Grid.Column="1"
+                                             Style="{StaticResource Meter}" Minimum="0" Maximum="100"
+                                             Value="50" VerticalAlignment="Center" Margin="12,0"/>
+                                <TextBlock x:Name="DashboardSteeringValue" Grid.Column="2"
+                                           Text="0%" Foreground="#A9C9FF"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="0,17,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="55"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ACCELERATORE" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ProgressBar x:Name="DashboardThrottleBar" Grid.Column="1"
+                                             Style="{StaticResource Meter}" Minimum="0" Maximum="100"
+                                             Value="0" VerticalAlignment="Center" Margin="12,0"
+                                             Foreground="#53C995"/>
+                                <TextBlock x:Name="DashboardThrottleValue" Grid.Column="2"
+                                           Text="0%" Foreground="#8DE2BB"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="0,17,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="55"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="FRENO" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ProgressBar x:Name="DashboardBrakeBar" Grid.Column="1"
+                                             Style="{StaticResource Meter}" Minimum="0" Maximum="100"
+                                             Value="0" VerticalAlignment="Center" Margin="12,0"
+                                             Foreground="#E29A65"/>
+                                <TextBlock x:Name="DashboardBrakeValue" Grid.Column="2"
+                                           Text="0%" Foreground="#F0B48D"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock x:Name="DashboardInputStatus"
+                                       Text="Collega un dispositivo dalla sezione Dispositivi."
+                                       Foreground="#8295AE" FontSize="11" Margin="0,20,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#14243A" BorderBrush="#29466C"
+                            BorderThickness="1" CornerRadius="13" Padding="17">
+                        <StackPanel>
+                            <TextBlock Text="PROSSIMO PASSAGGIO"
+                                       Foreground="#83B2FF" FontWeight="Bold" FontSize="10"/>
+                            <TextBlock Text="Dopo aver configurato e verificato gli input, collegheremo l'uscita al controller Xbox virtuale."
+                                       TextWrapping="Wrap" Foreground="#D0DCEC"
+                                       FontSize="12" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- DEVICES -->
+            <ScrollViewer x:Name="DevicesPage" Visibility="Collapsed"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Dispositivi" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Rileva, seleziona e monitora il volante."
+                               Style="{StaticResource MutedText}" Margin="0,5,0,24"/>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="DISPOSITIVI RILEVATI" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Scegli il dispositivo DirectInput da utilizzare."
+                                       Style="{StaticResource MutedText}" Margin="0,6,0,14"/>
+                            <ComboBox x:Name="DeviceComboBox" DisplayMemberPath="Name"/>
+                            <WrapPanel Margin="0,16,0,0">
+                                <Button Content="CERCA DISPOSITIVI" Style="{StaticResource ActionButton}" Click="RefreshDevices_Click"/>
+                                <Button Content="COLLEGA" Style="{StaticResource PrimaryButton}" Click="ConnectDevice_Click"/>
+                                <Button Content="DISCONNETTI" Style="{StaticResource DangerButton}" Click="DisconnectDevice_Click" Margin="0"/>
+                            </WrapPanel>
+                            <TextBlock x:Name="DeviceStatusText" Text="In attesa di rilevamento."
+                                       Foreground="#EAB866" Margin="0,16,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="MONITOR DIRECTINPUT" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock Text="Valori grezzi restituiti dal dispositivo selezionato."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,14"/>
+                            <UniformGrid Columns="2">
+                                <TextBlock x:Name="AxisXText" Text="Asse X: —" Margin="0,7"/>
+                                <TextBlock x:Name="AxisYText" Text="Asse Y: —" Margin="0,7"/>
+                                <TextBlock x:Name="AxisZText" Text="Asse Z: —" Margin="0,7"/>
+                                <TextBlock x:Name="AxisRXText" Text="Rotazione X: —" Margin="0,7"/>
+                                <TextBlock x:Name="AxisRYText" Text="Rotazione Y: —" Margin="0,7"/>
+                                <TextBlock x:Name="AxisRZText" Text="Rotazione Z: —" Margin="0,7"/>
+                                <TextBlock x:Name="Slider0Text" Text="Slider 1: non esposto" Margin="0,7"/>
+                                <TextBlock x:Name="Slider1Text" Text="Slider 2: non esposto" Margin="0,7"/>
+                            </UniformGrid>
+                            <TextBlock Text="PULSANTI PREMUTI" FontWeight="Bold"
+                                       FontSize="11" Margin="0,17,0,7"/>
+                            <Border Background="#0C1625" BorderBrush="#2A405C"
+                                    BorderThickness="1" CornerRadius="8" Padding="12">
+                                <TextBlock x:Name="ButtonsText" Text="Nessun pulsante rilevato."
+                                           Foreground="#8DB8FF" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- MAPPING -->
+            <ScrollViewer x:Name="MappingPage" Visibility="Collapsed"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Mappatura" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Scegli quali assi e pulsanti del volante associare ai comandi del gamepad."
+                               Style="{StaticResource MutedText}" Margin="0,5,0,24"/>
+
+                    <!-- ASSI -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="ASSOCIAZIONE DEGLI ASSI" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Seleziona l'asse fisico da usare per ogni comando."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,14"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="105"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Sterzo" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                <ComboBox x:Name="SteeringAxisCombo" Grid.Column="1" Margin="0,3,10,8"/>
+                                <Button Grid.Column="2" Content="RILEVA" Tag="Steering"
+                                        Style="{StaticResource ActionButton}" Click="CaptureAxis_Click"
+                                        Margin="0,3,10,8" Padding="12,7"/>
+                                <CheckBox x:Name="InvertSteeringCheck" Grid.Column="3"
+                                          Content="Inverti" VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Row="1" Text="Acceleratore" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                <ComboBox x:Name="ThrottleAxisCombo" Grid.Row="1" Grid.Column="1" Margin="0,3,10,8"/>
+                                <Button Grid.Row="1" Grid.Column="2" Content="RILEVA" Tag="Throttle"
+                                        Style="{StaticResource ActionButton}" Click="CaptureAxis_Click"
+                                        Margin="0,3,10,8" Padding="12,7"/>
+                                <CheckBox x:Name="InvertThrottleCheck" Grid.Row="1" Grid.Column="3"
+                                          Content="Inverti" VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Row="2" Text="Freno" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                <ComboBox x:Name="BrakeAxisCombo" Grid.Row="2" Grid.Column="1" Margin="0,3,10,0"/>
+                                <Button Grid.Row="2" Grid.Column="2" Content="RILEVA" Tag="Brake"
+                                        Style="{StaticResource ActionButton}" Click="CaptureAxis_Click"
+                                        Margin="0,3,10,0" Padding="12,7"/>
+                                <CheckBox x:Name="InvertBrakeCheck" Grid.Row="2" Grid.Column="3"
+                                          Content="Inverti" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock x:Name="AxisCaptureStatusText"
+                                       Text="Collega il volante, poi premi RILEVA e muovi soltanto il comando richiesto."
+                                       Foreground="#8295AE" FontSize="11" Margin="0,12,0,0"
+                                       TextWrapping="Wrap"/>
+
+                            <!-- SENSIBILITA MAPPATURA -->
+                            <Border Background="#101D2E" BorderBrush="#29415F"
+                                    BorderThickness="1" CornerRadius="10"
+                                    Padding="16" Margin="0,18,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="SENSIBILITÀ DELLO STERZO"
+                                               FontSize="13" FontWeight="Bold"
+                                               Foreground="#DCE9FA"/>
+                                    <TextBlock Text="Regola quanto rapidamente risponde il volante. Valori più alti rendono lo sterzo più reattivo."
+                                               Foreground="#8295AE" FontSize="11"
+                                               TextWrapping="Wrap" Margin="0,5,0,14"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="65"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Slider x:Name="MappingSensitivitySlider"
+                                                Minimum="50" Maximum="1000"
+                                                Value="400" TickFrequency="10"
+                                                IsSnapToTickEnabled="True"
+                                                VerticalAlignment="Center"
+                                                ValueChanged="MappingSensitivitySlider_ValueChanged"/>
+                                        <TextBlock x:Name="MappingSensitivityValueText"
+                                                   Grid.Column="1" Text="400%"
+                                                   Foreground="#8DB8FF"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- MONITOR ASSI -->
+                            <Border Background="#101D2E" BorderBrush="#29415F"
+                                    BorderThickness="1" CornerRadius="10"
+                                    Padding="16" Margin="0,18,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="MONITOR ASSI IN TEMPO REALE"
+                                               FontSize="12" FontWeight="Bold"
+                                               Foreground="#DCE9FA" Margin="0,0,0,14"/>
+                                    <UniformGrid Columns="3" HorizontalAlignment="Center">
+                                        <StackPanel Width="105" HorizontalAlignment="Center">
+                                            <ProgressBar x:Name="MappingSteeringMeter"
+                                                         Orientation="Vertical" Width="24"
+                                                         Height="112" Minimum="0" Maximum="100"
+                                                         Value="50" Foreground="#4A91F5"
+                                                         Background="#263A53" BorderThickness="0"/>
+                                            <TextBlock Text="Sterzo" Foreground="#AFCFFF"
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center" Margin="0,9,0,0"/>
+                                            <TextBlock x:Name="MappingSteeringValue" Text="0%"
+                                                       Foreground="#DCE9FA" FontSize="10"
+                                                       HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                        <StackPanel Width="105" HorizontalAlignment="Center">
+                                            <ProgressBar x:Name="MappingBrakeMeter"
+                                                         Orientation="Vertical" Width="24"
+                                                         Height="112" Minimum="0" Maximum="100"
+                                                         Value="0" Foreground="#E29A65"
+                                                         Background="#263A53" BorderThickness="0"/>
+                                            <TextBlock Text="Freno" Foreground="#F0B48D"
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center" Margin="0,9,0,0"/>
+                                            <TextBlock x:Name="MappingBrakeValue" Text="0%"
+                                                       Foreground="#DCE9FA" FontSize="10"
+                                                       HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                        <StackPanel Width="105" HorizontalAlignment="Center">
+                                            <ProgressBar x:Name="MappingThrottleMeter"
+                                                         Orientation="Vertical" Width="24"
+                                                         Height="112" Minimum="0" Maximum="100"
+                                                         Value="0" Foreground="#53C995"
+                                                         Background="#263A53" BorderThickness="0"/>
+                                            <TextBlock Text="Acceleratore" Foreground="#8DE2BB"
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center" Margin="0,9,0,0"/>
+                                            <TextBlock x:Name="MappingThrottleValue" Text="0%"
+                                                       Foreground="#DCE9FA" FontSize="10"
+                                                       HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="APPLICA MAPPATURA"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Click="ApplyMapping_Click"
+                                    HorizontalAlignment="Left" Margin="0,18,0,0"/>
+                            <TextBlock x:Name="MappingStatusText"
+                                       Text="Le modifiche si riflettono nel monitor input."
+                                       Foreground="#8295AE" FontSize="11"
+                                       Margin="0,10,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- MAPPATURA PULSANTI -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="MAPPATURA PULSANTI" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Seleziona un pulsante oppure premi RILEVA e poi premi il tasto fisico sul volante."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,15"
+                                       TextWrapping="Wrap"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="65"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- A -->
+                                <TextBlock Text="A" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonACombo" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Column="2" Margin="0,3,10,7" Background="#153B30" BorderBrush="#35B982" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  A" Foreground="#62E0A9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Column="3" Content="RILEVA" Tag="A" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- B -->
+                                <TextBlock Grid.Row="1" Text="B" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonBCombo" Grid.Row="1" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="1" Grid.Column="2" Margin="0,3,10,7" Background="#40232B" BorderBrush="#D85B69" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  B" Foreground="#FF8290" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="1" Grid.Column="3" Content="RILEVA" Tag="B" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- X -->
+                                <TextBlock Grid.Row="2" Text="X" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonXCombo" Grid.Row="2" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="2" Grid.Column="2" Margin="0,3,10,7" Background="#1D304B" BorderBrush="#559BEB" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  X" Foreground="#80B9FF" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="2" Grid.Column="3" Content="RILEVA" Tag="X" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- Y -->
+                                <TextBlock Grid.Row="3" Text="Y" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonYCombo" Grid.Row="3" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="3" Grid.Column="2" Margin="0,3,10,7" Background="#40391D" BorderBrush="#D7B84D" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  Y" Foreground="#F3D36B" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="3" Grid.Column="3" Content="RILEVA" Tag="Y" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- LB -->
+                                <TextBlock Grid.Row="4" Text="LB" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonLBCombo" Grid.Row="4" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="4" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="▰  LB" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="4" Grid.Column="3" Content="RILEVA" Tag="LB" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- RB -->
+                                <TextBlock Grid.Row="5" Text="RB" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonRBCombo" Grid.Row="5" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="5" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="▰  RB" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="5" Grid.Column="3" Content="RILEVA" Tag="RB" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- START -->
+                                <TextBlock Grid.Row="6" Text="START" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonStartCombo" Grid.Row="6" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="6" Grid.Column="2" Margin="0,3,10,7" Background="#292D3B" BorderBrush="#777F9A" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="Ⅱ  START" Foreground="#D0D8E8" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="6" Grid.Column="3" Content="RILEVA" Tag="Start" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- BACK -->
+                                <TextBlock Grid.Row="7" Text="BACK" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonBackCombo" Grid.Row="7" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="7" Grid.Column="2" Margin="0,3,10,7" Background="#292D3B" BorderBrush="#777F9A" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="◀  BACK" Foreground="#D0D8E8" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="7" Grid.Column="3" Content="RILEVA" Tag="Back" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- L3 -->
+                                <TextBlock Grid.Row="8" Text="L3" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonL3Combo" Grid.Row="8" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="8" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  L3" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="8" Grid.Column="3" Content="RILEVA" Tag="L3" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- R3 -->
+                                <TextBlock Grid.Row="9" Text="R3" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonR3Combo" Grid.Row="9" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="9" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="●  R3" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="9" Grid.Column="3" Content="RILEVA" Tag="R3" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- D-PAD UP -->
+                                <TextBlock Grid.Row="10" Text="D-PAD SU" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonDPadUpCombo" Grid.Row="10" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="10" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="▲  SU" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="10" Grid.Column="3" Content="RILEVA" Tag="DPadUp" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- D-PAD DOWN -->
+                                <TextBlock Grid.Row="11" Text="D-PAD GIÙ" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonDPadDownCombo" Grid.Row="11" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="11" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="▼  GIÙ" Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="11" Grid.Column="3" Content="RILEVA" Tag="DPadDown" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- D-PAD LEFT -->
+                                <TextBlock Grid.Row="12" Text="D-PAD SIN." FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonDPadLeftCombo" Grid.Row="12" Grid.Column="1" Margin="0,3,10,7"/>
+                                <Border Grid.Row="12" Grid.Column="2" Margin="0,3,10,7" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="◀  SIN." Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="12" Grid.Column="3" Content="RILEVA" Tag="DPadLeft" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,7" Padding="12,7"/>
+
+                                <!-- D-PAD RIGHT -->
+                                <TextBlock Grid.Row="13" Text="D-PAD DES." FontWeight="Bold" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ButtonDPadRightCombo" Grid.Row="13" Grid.Column="1" Margin="0,3,10,0"/>
+                                <Border Grid.Row="13" Grid.Column="2" Margin="0,3,10,0" Background="#25334A" BorderBrush="#6484AC" BorderThickness="1" CornerRadius="8" Padding="8,5">
+                                    <TextBlock Text="▶  DES." Foreground="#B5D1F4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Row="13" Grid.Column="3" Content="RILEVA" Tag="DPadRight" Style="{StaticResource ActionButton}" Click="CaptureButton_Click" Margin="0,3,0,0" Padding="12,7"/>
+                            </Grid>
+
+                            <!-- ANTEPRIMA GAMEPAD -->
+                            <Border Background="#101D2E" BorderBrush="#29415F"
+                                    BorderThickness="1" CornerRadius="12"
+                                    Padding="16" Margin="0,20,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="ANTEPRIMA CONTROLLER XBOX 360"
+                                               FontSize="12" FontWeight="Bold"
+                                               Foreground="#DCE9FA" Margin="0,0,0,8"/>
+                                    <TextBlock x:Name="GamepadSelectionText"
+                                               Text="Clicca un pulsante del controller per selezionarlo."
+                                               Foreground="#91A2B9" FontSize="11"
+                                               Margin="0,0,0,12"/>
+
+                                    <Viewbox Stretch="Uniform" MaxHeight="260">
+                                        <Canvas Width="560" Height="220">
+
+                                            <!-- Corpo -->
+                                            <Border Canvas.Left="75" Canvas.Top="40"
+                                                    Width="410" Height="145"
+                                                    Background="#26384D"
+                                                    BorderBrush="#526A86"
+                                                    BorderThickness="3"
+                                                    CornerRadius="65"
+                                                    IsHitTestVisible="False"/>
+
+                                            <!-- Impugnature -->
+                                            <Border Canvas.Left="45" Canvas.Top="105"
+                                                    Width="115" Height="95"
+                                                    Background="#26384D"
+                                                    BorderBrush="#526A86"
+                                                    BorderThickness="3"
+                                                    CornerRadius="45"
+                                                    IsHitTestVisible="False"/>
+                                            <Border Canvas.Left="400" Canvas.Top="105"
+                                                    Width="115" Height="95"
+                                                    Background="#26384D"
+                                                    BorderBrush="#526A86"
+                                                    BorderThickness="3"
+                                                    CornerRadius="45"
+                                                    IsHitTestVisible="False"/>
+
+                                            <!-- D-PAD -->
+                                            <Border x:Name="VisualDPadUp"
+                                                    Canvas.Left="136" Canvas.Top="105"
+                                                    Width="36" Height="23"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="1"
+                                                    CornerRadius="4"/>
+                                            <Border x:Name="VisualDPadDown"
+                                                    Canvas.Left="136" Canvas.Top="147"
+                                                    Width="36" Height="23"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="1"
+                                                    CornerRadius="4"/>
+                                            <Border x:Name="VisualDPadLeft"
+                                                    Canvas.Left="115" Canvas.Top="126"
+                                                    Width="23" Height="23"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="1"
+                                                    CornerRadius="4"/>
+                                            <Border x:Name="VisualDPadRight"
+                                                    Canvas.Left="170" Canvas.Top="126"
+                                                    Width="23" Height="23"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="1"
+                                                    CornerRadius="4"/>
+
+                                            <TextBlock Canvas.Left="148" Canvas.Top="109" Text="▲"
+                                                       Foreground="#AFC3DA" FontSize="12"
+                                                       IsHitTestVisible="False"/>
+                                            <TextBlock Canvas.Left="148" Canvas.Top="149" Text="▼"
+                                                       Foreground="#AFC3DA" FontSize="12"
+                                                       IsHitTestVisible="False"/>
+                                            <TextBlock Canvas.Left="120" Canvas.Top="128" Text="◀"
+                                                       Foreground="#AFC3DA" FontSize="12"
+                                                       IsHitTestVisible="False"/>
+                                            <TextBlock Canvas.Left="175" Canvas.Top="128" Text="▶"
+                                                       Foreground="#AFC3DA" FontSize="12"
+                                                       IsHitTestVisible="False"/>
+
+                                            <!-- Analogici L3 e R3 -->
+                                            <Border x:Name="VisualL3"
+                                                    Canvas.Left="215" Canvas.Top="112"
+                                                    Width="42" Height="42"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="3"
+                                                    CornerRadius="25">
+                                                <TextBlock Text="L3" Foreground="White"
+                                                           FontSize="10" FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualR3"
+                                                    Canvas.Left="300" Canvas.Top="112"
+                                                    Width="42" Height="42"
+                                                    Background="#111C2C"
+                                                    BorderBrush="#657B96"
+                                                    BorderThickness="3"
+                                                    CornerRadius="25">
+                                                <TextBlock Text="R3" Foreground="White"
+                                                           FontSize="10" FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- LB e RB -->
+                                            <Border x:Name="VisualLB" Canvas.Left="105" Canvas.Top="24"
+                                                    Width="105" Height="34" CornerRadius="9"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="LB" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualRB" Canvas.Left="350" Canvas.Top="24"
+                                                    Width="105" Height="34" CornerRadius="9"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="RB" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- BACK e START -->
+                                            <Border x:Name="VisualBack" Canvas.Left="245" Canvas.Top="77"
+                                                    Width="45" Height="22" CornerRadius="8"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="1">
+                                                <TextBlock Text="BACK" FontSize="9"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualStart" Canvas.Left="300" Canvas.Top="77"
+                                                    Width="45" Height="22" CornerRadius="8"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="1">
+                                                <TextBlock Text="START" FontSize="8"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- Pulsanti frontali -->
+                                            <Border x:Name="VisualY" Canvas.Left="395" Canvas.Top="65"
+                                                    Width="36" Height="36" CornerRadius="20"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="Y" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualX" Canvas.Left="365" Canvas.Top="100"
+                                                    Width="36" Height="36" CornerRadius="20"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="X" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualB" Canvas.Left="425" Canvas.Top="100"
+                                                    Width="36" Height="36" CornerRadius="20"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="B" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <Border x:Name="VisualA" Canvas.Left="395" Canvas.Top="135"
+                                                    Width="36" Height="36" CornerRadius="20"
+                                                    Background="#344B66" BorderBrush="#7189A5"
+                                                    BorderThickness="2">
+                                                <TextBlock Text="A" Foreground="White"
+                                                           FontWeight="Bold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- AREE CLICCABILI TRASPARENTI -->
+                                            <Button Canvas.Left="105" Canvas.Top="24"
+                                                    Width="105" Height="34"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="LB" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="350" Canvas.Top="24"
+                                                    Width="105" Height="34"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="RB" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+
+                                            <Button Canvas.Left="245" Canvas.Top="77"
+                                                    Width="45" Height="22"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="Back" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="300" Canvas.Top="77"
+                                                    Width="45" Height="22"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="Start" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+
+                                            <Button Canvas.Left="395" Canvas.Top="65"
+                                                    Width="36" Height="36"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="Y" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="365" Canvas.Top="100"
+                                                    Width="36" Height="36"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="X" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="425" Canvas.Top="100"
+                                                    Width="36" Height="36"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="B" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="395" Canvas.Top="135"
+                                                    Width="36" Height="36"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="A" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+
+                                            <Button Canvas.Left="136" Canvas.Top="105"
+                                                    Width="36" Height="23"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="DPadUp" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="136" Canvas.Top="147"
+                                                    Width="36" Height="23"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="DPadDown" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="115" Canvas.Top="126"
+                                                    Width="23" Height="23"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="DPadLeft" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="170" Canvas.Top="126"
+                                                    Width="23" Height="23"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="DPadRight" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+
+                                            <Button Canvas.Left="215" Canvas.Top="112"
+                                                    Width="42" Height="42"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="L3" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+                                            <Button Canvas.Left="300" Canvas.Top="112"
+                                                    Width="42" Height="42"
+                                                    Background="Transparent" BorderBrush="Transparent"
+                                                    BorderThickness="0" Content=""
+                                                    Tag="R3" Click="GamepadButton_Click"
+                                                    Cursor="Hand"/>
+
+                                        </Canvas>
+                                    </Viewbox>
+
+                                    <TextBlock Text="Clicca un pulsante per selezionarlo, poi premi il tasto fisico sul volante."
+                                               Foreground="#91A2B9" FontSize="10"
+                                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock x:Name="ButtonCaptureStatusText"
+                                       Text="Per usare RILEVA, collega prima il volante."
+                                       Foreground="#8295AE" FontSize="11"
+                                       Margin="0,13,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- PROFILES -->
+            <ScrollViewer x:Name="ProfilesPage" Visibility="Collapsed"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Profili" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Salva configurazioni diverse e richiamale quando ti servono."
+                               Style="{StaticResource MutedText}" Margin="0,5,0,24"/>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="SALVA CONFIGURAZIONE CORRENTE" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Dai un nome al profilo: ad esempio Roblox, Guida o Default."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,14"
+                                       TextWrapping="Wrap"/>
+                            <TextBox x:Name="ProfileNameTextBox" Text="Il mio profilo"/>
+                            <Button Content="SALVA PROFILO" Style="{StaticResource PrimaryButton}"
+                                    Click="SaveProfile_Click" HorizontalAlignment="Left"
+                                    Margin="0,14,0,0"/>
+                            <TextBlock x:Name="ProfileStatusText"
+                                       Text="I profili vengono salvati sul PC in uso."
+                                       Foreground="#8295AE" FontSize="11"
+                                       Margin="0,10,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="PROFILI SALVATI" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Seleziona un profilo per caricarlo o eliminarlo."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,12"/>
+                            <ListBox x:Name="ProfilesListBox" MinHeight="130" MaxHeight="220"
+                                     Background="#0C1523" Foreground="#EAF1FA"
+                                     BorderBrush="#344A67" BorderThickness="1" Padding="5"/>
+                            <WrapPanel Margin="0,14,0,0">
+                                <Button Content="CARICA" Style="{StaticResource PrimaryButton}" Click="LoadProfile_Click"/>
+                                <Button Content="ELIMINA" Style="{StaticResource DangerButton}" Click="DeleteProfile_Click" Margin="0"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- SETTINGS -->
+            <ScrollViewer x:Name="SettingsPage" Visibility="Collapsed"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Impostazioni" FontSize="28" FontWeight="Bold"/>
+                    <TextBlock Text="Regola la risposta del volante e salva le preferenze locali."
+                               Style="{StaticResource MutedText}" Margin="0,5,0,24"/>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="SENSIBILITÀ DELLO STERZO" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Modifica quanto rapidamente reagisce il valore dello sterzo."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,14"
+                                       TextWrapping="Wrap"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <Slider x:Name="SensitivitySlider"
+                                        Minimum="50" Maximum="1000"
+                                        Value="400" TickFrequency="10"
+                                        IsSnapToTickEnabled="True"
+                                        VerticalAlignment="Center"
+                                        ValueChanged="SensitivitySlider_ValueChanged"/>
+                                <TextBlock x:Name="SensitivityValueText"
+                                           Grid.Column="1" Text="400%"
+                                           Foreground="#8DB8FF" FontWeight="Bold"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="ZONA MORTA" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Riduce piccoli movimenti involontari vicino al centro dello sterzo e all'inizio della corsa dei pedali."
+                                       Style="{StaticResource MutedText}" Margin="0,5,0,14"
+                                       TextWrapping="Wrap"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <Slider x:Name="DeadzoneSlider" Minimum="0" Maximum="30"
+                                        Value="5" TickFrequency="1"
+                                        IsSnapToTickEnabled="True"
+                                        VerticalAlignment="Center"
+                                        ValueChanged="DeadzoneSlider_ValueChanged"/>
+                                <TextBlock x:Name="DeadzoneValueText" Grid.Column="1"
+                                           Text="5%" Foreground="#8DB8FF"
+                                           FontWeight="Bold" HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="PREFERENZE" FontSize="14" FontWeight="Bold"/>
+                            <CheckBox x:Name="ShowRawValuesCheck"
+                                      Content="Mostra i valori DirectInput nella schermata Dispositivi"
+                                      IsChecked="True"/>
+                            <TextBlock Text="Questa opzione controlla solo la visualizzazione dei valori grezzi; non cambia il collegamento al volante."
+                                       Style="{StaticResource MutedText}"
+                                       TextWrapping="Wrap" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Content="SALVA IMPOSTAZIONI"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="SaveSettings_Click"
+                            HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="SettingsStatusText"
+                               Text="Le impostazioni sono locali a questo PC."
+                               Foreground="#8295AE" FontSize="11"
+                               Margin="0,10,0,20"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
