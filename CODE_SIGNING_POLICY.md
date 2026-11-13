@@ -1,20 +1,25 @@
-
 # WheelBridge - Code Signing Policy
+
+**Free code signing provided by SignPath.io, certificate by SignPath Foundation.**
 
 ## Project
 
 WheelBridge is an open-source Windows application developed and maintained by MattyDrex71.
 
-Repository:
+Repository:  
 https://github.com/MattyDrex71/WheelBridge
 
-## Signing provider
+## Current Signing Status
 
-Free code signing provided by SignPath.io, certificate by SignPath Foundation.
+**Status: Not yet approved.**
 
-**Status:** Application not yet approved. Until approval, all published releases remain unsigned.
+WheelBridge has not yet been approved by SignPath Foundation.
 
-## Team responsibilities
+Until approval and signing configuration are completed, all published releases remain unsigned.
+
+## Team Responsibilities
+
+The project is currently maintained by one developer.
 
 - **Authors:** MattyDrex71
 - **Reviewers:** MattyDrex71
@@ -22,18 +27,28 @@ Free code signing provided by SignPath.io, certificate by SignPath Foundation.
 
 Every release signing request must be manually reviewed and approved before signing.
 
-## What can be signed
+## What Can Be Signed
 
-Only WheelBridge binaries built from the source code maintained in this repository may be signed.
+Only WheelBridge binaries built from the source code maintained in this repository may be signed using the project's SignPath subscription.
 
-Third-party software and drivers are not signed as WheelBridge software.
+Third-party software, libraries and drivers are not signed as WheelBridge software.
 
-## Privacy
+## Privacy Policy
 
-WheelBridge does not collect or transmit personal information or usage data to external services.
+WheelBridge's privacy practices are documented in its [Privacy Policy](PRIVACY_POLICY.md).
 
-## System changes
+Third-party components may have their own privacy practices and policies.
 
-The installer may install the Nefarius ViGEmBus virtual gamepad driver. This requires administrator privileges.
+## System Changes
+
+The WheelBridge installer may install the Nefarius ViGEmBus virtual gamepad driver.
+
+Driver installation requires administrator privileges.
 
 Users can uninstall WheelBridge through Windows Settings.
+
+## Official Repository
+
+https://github.com/MattyDrex71/WheelBridge
+
+**Developer:** MattyDrex71
