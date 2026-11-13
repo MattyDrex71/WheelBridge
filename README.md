@@ -105,3 +105,11 @@ Use the GitHub Issues section to report bugs or suggest new features.
 WheelBridge — Your Wheel. Your Controller. Your Rules.
 
 © 2026 MattyDrex71. All rights reserved.
+
+
+## Code Signing Policy
+
+WheelBridge's code signing policy is available [here](CODE_SIGNING_POLICY.md).
+
+**Current status:** WheelBridge is currently unsigned. The project has not yet been approved by SignPath Foundation.
+
