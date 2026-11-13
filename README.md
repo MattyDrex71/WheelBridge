@@ -1,5 +1,5 @@
 # WheelBridge
-- clil on releases and download the file WheelBridge_setup.exe
+- clil on releases and download the file.
 ### Your Wheel. Your Controller. Your Rules.
 
 Virtual Xbox 360 Controller Emulator for Racing Wheels
